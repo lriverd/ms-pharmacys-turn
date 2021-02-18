@@ -15,6 +15,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +29,8 @@ public class Geolocation {
 		List<PharmacyRest> pharmacyRestList = pharmacyRestService.getPharmacys();
 
 		List<PharmacyRest> filteredPharmacyRestList = pharmacyRestList.stream()
-			.filter(pr -> GeolocationCalculator.distanceBetwenPoints(coordinates,
+			.filter(pr -> !Objects.toString(pr.getLocalLat(), "").isEmpty() &&
+				GeolocationCalculator.distanceBetwenPoints(coordinates,
 				Coordinates.builder()
 					.latitude(Double.parseDouble(pr.getLocalLat()))
 					.longitude(Double.parseDouble(pr.getLocalLng())).build()) <= maxKmRatio)
