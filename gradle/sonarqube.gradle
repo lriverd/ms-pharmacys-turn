@@ -1,0 +1,26 @@
+/* ============================================================================
+   This file contains the configurations for sonarqube 
+   ============================================================================
+   
+   Included from: "${rootProject.projectDir}/build.gradle"
+   ============================================================================
+ */
+def excludePatterns = [
+        "**/*Type.java",
+        "**/model/**/*.java",
+        "**/boot/**/*.java",
+        "**/*Configuration.java",
+        "**/Constants*.java",
+        "**/*Exception.java",
+        "**/*Config.java",
+        "**/PortabilityApplication.java",
+]
+
+sonarqube {
+    properties {
+        property "sonar.sources", "src/main/java/cl"
+        property "sonar.exclusions", excludePatterns
+    }
+}
+
+

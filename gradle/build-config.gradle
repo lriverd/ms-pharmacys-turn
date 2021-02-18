@@ -1,0 +1,43 @@
+/* ============================================================================
+   This file contains the configurations for
+   This Project
+   ============================================================================
+
+   Included from: "${rootProject.projectDir}/build.gradle"
+   ============================================================================
+ */
+
+description = project.property("app.description")
+group = project.property("app.group")
+version = project.property("app.version")
+targetCompatibility = project.property("java.version")
+sourceCompatibility = project.property("java.version")
+
+
+//devops-pipeline version modification
+def branch = System.env.BRANCH_NAME
+if (branch) {
+	version += '-' + branch.replaceAll('[^A-Za-z0-9]+', '_')
+	version += '-' + new Date().format('yyyyMMddHHmm')
+}
+
+/* ------------------------------------ */
+/* ---- Create version.properties  ---- */
+/* ------------------------------------ */
+task createProperties(dependsOn: processResources) {
+	doLast {
+		new File("$buildDir/resources/main/version.properties").withWriter { w ->
+			Properties p = new Properties()
+			p['info.app.name'] = project.name.toString()
+			p['info.app.description'] = project.description.toString()
+			p['info.app.version'] = project.version.toString()
+			p['info.app.buildDate'] = new Date().format('yyyy-MM-dd HH:mm:ss')
+			p['info.app.artifactName'] = project.group + ":" + project.name + ":" + project.version
+			p.store w, null
+		}
+	}
+}
+
+classes {
+	dependsOn createProperties
+}

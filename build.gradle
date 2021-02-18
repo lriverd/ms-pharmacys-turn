@@ -1,0 +1,19 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'war'
+	id 'com.github.spotbugs' version "4.5.0"
+	id 'jacoco'
+	id 'org.sonarqube' version '3.0'
+}
+
+/* -------------------------------- */
+/* - Include other gradle scripts - */
+/* -------------------------------- */
+def gradlePath = "${rootProject.projectDir}${project.property('gradle.path')}"
+apply from: "${gradlePath}/build-config.gradle"
+apply from: "${gradlePath}/build-java.gradle"
+apply from: "${gradlePath}/sonarqube.gradle"
+apply from: "${gradlePath}/build-artifact.gradle"
+apply from: "${gradlePath}/dependencies.gradle"

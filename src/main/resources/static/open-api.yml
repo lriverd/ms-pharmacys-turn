@@ -1,0 +1,19 @@
+openapi: 3.0.0
+info:
+  title: Pharmacy's turn api
+  description: This is Pharmacy's turn chile API
+  version: 0.0.1
+  contact:
+    email: lc.riverd@gmail.cl
+paths:
+  '/v1/turn/by-geolocation':
+    get:
+      tags:
+        - Geolocation
+      description: Get open pharmacies by geolocation
+      sumary: n
+      responses:
+        '200':
+          description: Get pharmacies correctly
+        '500':
+          description: Error getting closer pharmacies

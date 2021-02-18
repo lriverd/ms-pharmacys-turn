@@ -1,0 +1,36 @@
+# ==================================================================================== #
+# APPLICATION CONFIGURATION
+# ==================================================================================== #
+server:
+  port: 8090
+  servlet:
+    context-path: /ms-pharmacys-turn
+
+spring:
+  application:
+    name: ms-pharmacys-turn
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog/changelog-master.xml
+
+# Liquibase update
+# ------------------------------ #
+datasource:
+  updateLiquibase: true
+
+# ==================================================================================== #
+# REST SERVICES
+# ==================================================================================== #
+# Pharmacy minsal source
+# ------------------------------ #
+pharmacy:
+  host: https://farmanet.minsal.cl/
+  turns:
+    tmpl-url: ${pharmacy.host}/index.php/ws/getLocalesTurnos
+
+
