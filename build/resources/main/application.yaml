@@ -6,12 +6,16 @@ server:
   servlet:
     context-path: /ms-pharmacys-turn
 
+springdoc:
+  version: '@springdoc.version@'
+
+
 spring:
   application:
     name: ms-pharmacys-turn
   jackson:
-    property-naming-strategy: SNAKE_CASE
     default-property-inclusion: non_null
+    property-naming-strategy: LOWER_CASE
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
   liquibase:

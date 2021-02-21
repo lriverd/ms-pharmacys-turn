@@ -22,7 +22,7 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.4.6'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.4'
 
     //Jwt token
     compile 'io.jsonwebtoken:jjwt:0.9.1'

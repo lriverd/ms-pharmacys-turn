@@ -23,6 +23,8 @@ public class JacksonConfig {
     @Bean
     public Jackson2ObjectMapperBuilder jacksonBuilder() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        builder.propertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
 
         builder.simpleDateFormat(DEFAULT_DATE_FORMAT);
         builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)));

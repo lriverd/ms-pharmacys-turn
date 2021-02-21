@@ -6,6 +6,7 @@ import cl.duamit.pharmacy.model.Pharmacy;
 import cl.duamit.pharmacy.ws.PharmacyRest;
 import cl.duamit.pharmacy.ws.PharmacyRestService;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,36 +15,43 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class Geolocation {
 
 	private PharmacyRestService pharmacyRestService;
 
 	@SneakyThrows
-	public List<Pharmacy> getByGeolocation(Coordinates coordinates, Integer maxKmRatio) {
+	public List<Pharmacy> getByGeolocation(Coordinates coordinates, Double maxKmRatio) {
 		List<Pharmacy> pharmacyList = new ArrayList<>();
 		List<PharmacyRest> pharmacyRestList = pharmacyRestService.getPharmacys();
 
-		List<PharmacyRest> filteredPharmacyRestList = pharmacyRestList.stream()
-			.filter(pr -> !Objects.toString(pr.getLocalLat(), "").isEmpty() &&
-				GeolocationCalculator.distanceBetwenPoints(coordinates,
-				Coordinates.builder()
-					.latitude(Double.parseDouble(pr.getLocalLat()))
-					.longitude(Double.parseDouble(pr.getLocalLng())).build()) <= maxKmRatio)
-			.collect(Collectors.toList());
-
-		filteredPharmacyRestList.forEach(f -> {
-			pharmacyList.add(parsePharmacy(f));
+		pharmacyRestList.forEach(pr -> {
+			try {
+				if (!Objects.toString(pr.getLocalLat(), "").isEmpty()) {
+					double distance = GeolocationCalculator.distanceBetwenPoints(coordinates,
+						Coordinates.builder()
+							.latitude(Double.parseDouble(pr.getLocalLat().replaceAll("(^\\h*)|(\\h*$)","")))
+							.longitude(Double.parseDouble(pr.getLocalLng().replaceAll("(^\\h*)|(\\h*$)",""))).build());
+					if (distance <= maxKmRatio) {
+						pharmacyList.add(parsePharmacy(pr, distance));
+					}
+				}
+			}catch (Exception e){
+				log.error("Error evaluating pharmacy", e);
+			}
 		});
+
+		pharmacyList.sort(Comparator.comparing(Pharmacy::getDistanceKmFromOrigin));
 
 		return pharmacyList;
 	}
 
-	private Pharmacy parsePharmacy(PharmacyRest pharmacyRest) {
+	private Pharmacy parsePharmacy(PharmacyRest pharmacyRest, Double distance) {
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 		Pharmacy response = new Pharmacy();
 		response.setId(pharmacyRest.getLocalId());
@@ -67,8 +75,15 @@ public class Geolocation {
 			to = to.plusDays(1);
 		}
 
-		response.setOpenTime(from);
-		response.setCloseTime(to);
+		response.setOpenAt(from);
+		response.setCloseAt(to);
+
+		response.setPhone(pharmacyRest.getLocalTelefono());
+
+		response.setOpenNow(LocalDateTime.now().isAfter(from) && LocalDateTime.now().isBefore(to));
+
+		response.setDistanceKmFromOrigin((double) (distance.intValue()) / 1000d);
+
 		return response;
 	}
 

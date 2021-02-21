@@ -39,23 +39,12 @@ public class DataBaseUpdater {
 
 		SpringLiquibase liquibase = new SpringLiquibase();
 		liquibase.setChangeLog(CHANGELOG_LOCATION);
-		liquibase.setShouldRun(shouldExecuteLiquibase());
 
 		Map<String, String> params = new HashMap<>();
 		params.put(VERBOSE, Boolean.TRUE.toString());
 		liquibase.setChangeLogParameters(params);
 
 		return liquibase;
-	}
-
-	private boolean shouldExecuteLiquibase() {
-		String prop = ApplicationContextProvider
-			.getApplicationContext()
-			.getEnvironment()
-			.getProperty("datasource.updateLiquibase", "true");
-		boolean updateLiquibase = Boolean.parseBoolean(prop);
-		log.info(":::::::Update Liquibase -> {}", prop);
-		return updateLiquibase;
 	}
 
 }

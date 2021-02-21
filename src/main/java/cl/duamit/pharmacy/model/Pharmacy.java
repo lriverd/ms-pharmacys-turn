@@ -11,6 +11,8 @@ public class Pharmacy {
 	private String addresse;
 	private String phone;
 	private Coordinates coordinates;
-	private LocalDateTime openTime;
-	private LocalDateTime closeTime;
+	private LocalDateTime openAt;
+	private LocalDateTime closeAt;
+	private boolean openNow;
+	private Double distanceKmFromOrigin;
 }

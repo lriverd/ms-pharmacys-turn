@@ -1,4 +1,0 @@
-cl/duamit/pharmacy/PortabilityApplicationTests.java
- cl.duamit.pharmacy.PortabilityApplicationTests
-cl/duamit/pharmacy/geolocation/GeolocationCalculatorTest.java
- cl.duamit.pharmacy.geolocation.GeolocationCalculatorTest
