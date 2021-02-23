@@ -1,1 +1,1 @@
-web: java -jar build/libs/ms-pharmacys-turn-1.0.0.jar
+web: java $JAVA_OPTS -Dserver.port=$PORT -jar app-1.0.0.jar
