@@ -5,17 +5,10 @@
    Included from: "${rootProject.projectDir}/build.gradle"
    ============================================================================
  */
-// DO NOT MODIFY these tasks are used in the pipeline to generate artifact name & publish artifact
-jar {
-    archivesBaseName = 'app'
-    archiveVersion = '0.0.1'
-}
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
 
-task artifactName {
-    doLast {
-        new File('artifact.txt').write("${project.group}:${project.name}:${project.version}", 'UTF-8')
-    }
-}
+
 
 
 
