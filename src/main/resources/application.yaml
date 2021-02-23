@@ -22,10 +22,6 @@ spring:
     enabled: false
     change-log: classpath:db/changelog/changelog-master.xml
 
-# Liquibase update
-# ------------------------------ #
-datasource:
-  updateLiquibase: true
 
 # ==================================================================================== #
 # REST SERVICES

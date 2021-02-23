@@ -53,6 +53,7 @@ public class Geolocation {
 
 	private Pharmacy parsePharmacy(PharmacyRest pharmacyRest, Double distance) {
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		Pharmacy response = new Pharmacy();
 		response.setId(pharmacyRest.getLocalId());
 		response.setName(pharmacyRest.getLocalNombre());
@@ -63,7 +64,7 @@ public class Geolocation {
 			.build();
 		response.setCoordinates(c);
 
-		LocalDate date = LocalDate.now();
+		LocalDate date = LocalDate.parse(pharmacyRest.getFecha(), dateFormatter);
 
 		LocalTime timeFrom = LocalTime.parse(pharmacyRest.getFuncionamientoHoraApertura(), timeFormatter);
 		LocalTime timeTo = LocalTime.parse(pharmacyRest.getFuncionamientoHoraCierre(), timeFormatter);
